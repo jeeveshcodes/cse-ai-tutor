@@ -1,4 +1,11 @@
+"""
+Ingestion script for Luna — CSE AI Tutor.
+Extracts text from PDF notes in the /knowledge directory, breaks them into semantic chunks,
+generates embeddings, and stores them in ChromaDB.
+"""
+
 import os
+import chroma_compat  # Compatibility shim for gRPC telemetry
 from pypdf import PdfReader
 import chromadb
 from chromadb.utils import embedding_functions
@@ -13,7 +20,7 @@ chroma_client = chromadb.PersistentClient(path="./chroma_db")
 # ---- Wipe any existing collection so we always rebuild fresh ----
 try:
     chroma_client.delete_collection(name="dsa_notes")
-    print("Cleared old database.\n")
+    print("Cleared old database collection.\n")
 except Exception:
     print("No existing database found, starting fresh.\n")
 
